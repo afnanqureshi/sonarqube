@@ -3,7 +3,7 @@
     projects in SonarQube.
     __author__ = "Mohd Afnan Qureshi"
     __maintainer__ = "Mohd Afnan Qureshi"
-    __email__ = "afnan.qureshi@sunlife.com"
+    __email__ = "md.afnan1995@gmail.com"
     __status__ = "Production"
 '''
 
