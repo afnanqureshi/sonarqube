@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('SCM Checkout') {
             steps {
-                git branch: 'main', credentialsId: 'jenkins_credentials_for_bitbucket_access', url: 'git@github.com:afnanqureshi/sonarqube.git'
+                git branch: 'main', credentialsId: 'jenkins_credentials_for_github_access', url: 'git@github.com:afnanqureshi/sonarqube.git'
             }
         }
         stage('Build') {

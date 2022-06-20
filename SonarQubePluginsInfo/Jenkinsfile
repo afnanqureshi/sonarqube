@@ -1,0 +1,41 @@
+pipeline {
+	agent any
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                git branch: 'develop', credentialsId: 'jenkins_credentials_for_github_access', url: 'git@github.com:afnanqureshi/sonarqube.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    sh '''#!/bin/bash
+                        export token = "${token}"
+                        source /disk1/bin/python3-virtualenv/bin/activate
+                        python SonarQubePluginsInfo/SonarQubeGetPluginsInfo.py
+                    '''
+                }
+            }
+        }
+        stage('Push') {
+            steps {
+                git branch: 'develop', credentialsId: 'jenkins_credentials_for_github_access', url: 'git@github.com:afnanqureshi/sonarqube.git'
+                    script{
+                        sh '''cd SonarQubePluginsInfo
+                            git checkout -b feature/SonarQubePlugins
+                            mv $WORKSPACE/SonarQubePlugins.md ./SonarQubePlugins.md
+                            if [ -z "$(git status --porcelain)" ]; then
+                                    echo "No new plugins added"
+                            else
+                                git status
+                                git add --all
+                                git commit -m "SonarQubePlugins updated commit #${BUILD_NUMBER}"
+                                git push --set-upstream origin feature/SonarQubePlugins
+                            fi
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
